@@ -49,7 +49,7 @@ export default function Home() {
       setCountdown(10); // Wait 10 seconds for relayer to index
       
       refetchPlayCount().then(async ({ data }) => {
-        const newPlayId = data ? data - BigInt(1) : BigInt(0);
+        const newPlayId = data ? BigInt(data.toString()) - BigInt(1) : BigInt(0);
         
         try {
           const playInfo = await publicClient?.readContract({
