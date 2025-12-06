@@ -1,7 +1,7 @@
 // Auto-generated contract configuration
 import LotteryDayArtifact from './LotteryDay.json';
 
-export const CONTRACT_ADDRESS = "0xa496F69D56De46BA24ED9c020f975A1d661Fa5fd" as const;
+export const CONTRACT_ADDRESS = "0xD7d805fCeb306A096793106D6AfB829c7bf1fE41" as const;
 export const CHAIN_ID = 11155111;
 export const NETWORK_NAME = "Sepolia";
 export const RPC_URL = "https://eth-sepolia.g.alchemy.com/v2/6THjIdSVGHMxJVQ6ocOdK";

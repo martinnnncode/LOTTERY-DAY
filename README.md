@@ -18,7 +18,7 @@
 
 - **Client-side Encryption**: Numbers encrypted in browser using FHEVM SDK
 - **On-chain FHE Computation**: Encrypted comparison with `FHE.eq()`
-- **Encrypted Random Target**: Using `FHE.randEuint8()` — target never exposed
+- **Verifiable Randomness**: On-chain random target generation
 - **User-controlled Decryption**: Only you can decrypt via EIP-712 signature
 
 ## How It Works
@@ -32,8 +32,8 @@
 | Field | Value |
 |-------|-------|
 | **Network** | Ethereum Sepolia |
-| **Contract** | `0xa496F69D56De46BA24ED9c020f975A1d661Fa5fd` |
-| **Etherscan** | [Verified Source](https://sepolia.etherscan.io/address/0xa496F69D56De46BA24ED9c020f975A1d661Fa5fd#code) |
+| **Contract** | `0xD7d805fCeb306A096793106D6AfB829c7bf1fE41` |
+| **Etherscan** | [Verified Source](https://sepolia.etherscan.io/address/0xD7d805fCeb306A096793106D6AfB829c7bf1fE41#code) |
 
 ## Tech Stack
 
@@ -78,10 +78,11 @@ npx hardhat test
 // Encrypted user choice
 euint8 choice = FHE.fromExternal(inputHandle, inputProof);
 
-// Encrypted random target (1-10) - never exposed as plaintext
-euint8 encryptedTarget = FHE.add(FHE.randEuint8(10), FHE.asEuint8(1));
+// Random target using on-chain randomness
+uint8 target = uint8(keccak256(...) % 10 + 1);
+euint8 encryptedTarget = FHE.asEuint8(target);
 
-// Encrypted comparison
+// Encrypted comparison - user choice remains private
 ebool isWinnerEnc = FHE.eq(choice, encryptedTarget);
 
 // Grant decryption permission
