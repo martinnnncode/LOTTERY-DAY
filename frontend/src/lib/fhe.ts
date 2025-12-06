@@ -87,9 +87,6 @@ export async function userDecrypt(
     durationDays
   );
   
-  console.log('Requesting EIP-712 signature...');
-  
-  // Sign with wallet (viem format)
   const signature = await signer.signTypedData({
     domain: eip712.domain,
     types: { UserDecryptRequestVerification: eip712.types.UserDecryptRequestVerification },
@@ -97,17 +94,10 @@ export async function userDecrypt(
     message: eip712.message,
   });
   
-  console.log('Signature obtained, calling userDecrypt...');
-  console.log('Handle:', handle);
-  console.log('Contract:', CONTRACT_ADDRESS);
-  
-  // Retry logic for relayer
   let lastError: Error | null = null;
   
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
-      console.log(`Attempt ${attempt}/${maxRetries}...`);
-      
       const result = await instance.userDecrypt(
         [{ handle, contractAddress: CONTRACT_ADDRESS }],
         privateKey,
@@ -119,20 +109,14 @@ export async function userDecrypt(
         durationDays
       );
       
-      console.log('UserDecrypt result:', result);
-      
-      // Extract decrypted value
       const decryptedValue = result[handle] as boolean;
       return decryptedValue;
       
     } catch (error: any) {
-      console.error(`Attempt ${attempt} failed:`, error.message);
       lastError = error;
       
       if (attempt < maxRetries) {
-        // Wait before retry (exponential backoff)
         const delay = attempt * 5000;
-        console.log(`Waiting ${delay}ms before retry...`);
         await new Promise(resolve => setTimeout(resolve, delay));
       }
     }

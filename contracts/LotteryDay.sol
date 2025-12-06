@@ -32,18 +32,12 @@ contract LotteryDay is ZamaEthereumConfig {
         
         euint8 choice = FHE.fromExternal(inputHandle, inputProof);
         
-        // Random target (1-10)
-        uint8 target = uint8(
-            uint256(keccak256(abi.encodePacked(
-                playId,
-                block.timestamp,
-                block.prevrandao,
-                msg.sender
-            ))) % 10 + 1
-        );
-        euint8 encryptedTarget = FHE.asEuint8(target);
+        // Generate encrypted random target (1-10)
+        // Using FHE.randEuint8(10) for 0-9, then add 1 for 1-10
+        // Target is never exposed as plaintext - fully private
+        euint8 encryptedTarget = FHE.add(FHE.randEuint8(10), FHE.asEuint8(1));
         
-        // Encrypted comparison
+        // Encrypted comparison - both choice and target are encrypted
         ebool isWinnerEnc = FHE.eq(choice, encryptedTarget);
         bytes32 resultHandle = ebool.unwrap(isWinnerEnc);
         

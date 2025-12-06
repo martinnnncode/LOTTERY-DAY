@@ -59,9 +59,8 @@ export default function Home() {
             args: [newPlayId],
           }) as [string, string];
           
-          const handle = playInfo[1]; // resultHandle is second element
+          const handle = playInfo[1];
           setResultHandle(handle);
-          console.log('Got handle:', handle);
         } catch (e) {
           console.error('Failed to get play info:', e);
         }
@@ -105,9 +104,7 @@ export default function Home() {
       setError(null);
       setGamePhase('decrypting');
       
-      // Call userDecrypt - sign EIP-712 and get result
       const win = await userDecrypt(resultHandle, address, walletClient, 5);
-      console.log('UserDecrypt result:', win);
       
       setIsWinner(win);
       setGamePhase('result');
@@ -193,7 +190,6 @@ export default function Home() {
               </div>
 
               <div className="relative bg-gradient-to-b from-white/[0.08] to-white/[0.02] backdrop-blur-xl rounded-3xl border border-white/10 p-8">
-                {/* Refresh Button */}
                 <button 
                   onClick={resetGame}
                   className="absolute top-4 right-4 p-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 transition-all group"
