@@ -28,8 +28,17 @@ export default function Home() {
     functionName: 'playCount',
   });
 
-  const { writeContract: playWrite, data: playTxHash, reset: resetPlay } = useWriteContract();
+  const { writeContract: playWrite, data: playTxHash, reset: resetPlay, error: writeError, isPending: isWritePending } = useWriteContract();
   const { isSuccess: playSuccess } = useWaitForTransactionReceipt({ hash: playTxHash });
+
+  // Handle write errors
+  useEffect(() => {
+    if (writeError && gamePhase === 'submitting') {
+      console.error('Write error:', writeError);
+      setError(writeError.message || 'Transaction failed');
+      setGamePhase('select');
+    }
+  }, [writeError, gamePhase]);
 
   useEffect(() => {
     if (isConnected && !fhevmReady) {
